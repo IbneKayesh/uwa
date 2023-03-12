@@ -1,0 +1,4 @@
+ {
+        "SIZE":0,
+        "SQL":"insert into WS_ROLE (ID,ROLE_NAME)values(@ID,@ROLE_NAME)"
+}

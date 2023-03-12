@@ -1,0 +1,4 @@
+ {
+        "SIZE":0,
+        "SQL":"SELECT ID,ROLE_NAME FROM WS_ROLE"
+}

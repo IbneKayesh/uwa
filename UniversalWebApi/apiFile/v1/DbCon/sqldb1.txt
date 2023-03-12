@@ -1,0 +1,6 @@
+{
+        "LINK_ID": "wsDB",
+        "DB_CONNECTION":"Data Source=KYSAEH\\SQLEXPRESS;Initial Catalog=wsDB;User ID=sa;Password=123;",
+        "DB_NAME_DESC": "",
+        "FILE_LOCATION": "\\apiFile\\v1\\LocalSqlDb\\"
+}

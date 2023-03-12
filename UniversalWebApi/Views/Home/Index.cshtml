@@ -1,0 +1,72 @@
+﻿<div class="jumbotron">
+    <h1>Universal Web Api</h1>
+    <p class="lead">Universal Web Api is a free web api for building great dynamic web api.</p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>Write MSSQL database connection string.</p>
+        <p><span class="text-danger">\\apiFile\\v1\\DbCon\\</span></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Write SQL queries</h2>
+        <p>Write SQL queries as you required corresponding the database file</p>
+        <p><span class="text-danger">\\apiFile\\v1\\LocalSqlDb\\</span></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>Publish and Host this app to IIS or ASP.NET server.</p>
+        <p><a class="btn btn-primary" href="https://github.com/IbneKayesh">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+<p>Endpoint: <strong class="text-danger">/api/v1/ApplyCommit</strong></p>
+
+<strong>select query with parameter</strong>
+<pre>
+<code>
+{
+  "SF_NAME": "sqldb1-sql1",
+  "SF_RETN": "GET",
+  "PARAM_LIST": [
+                    {
+                      "TEXT": "@@PROJ_ID",
+                      "VALUE": "1"
+                    }
+                ]
+}
+</code>
+</pre>
+
+
+<strong>select query without parameter</strong>
+<pre>
+<code>
+{
+  "SF_NAME": "sqldb1-sql3",
+  "SF_RETN": "GET",
+  "PARAM_LIST": []
+}
+</code>
+</pre>
+
+
+<strong>insert query with parameter</strong>
+<pre>
+<code>
+{
+  "SF_NAME": "sqldb1-sql2",
+  "SF_RETN": "POST",
+  "PARAM_LIST": [
+                   {
+                      "TEXT": "@@ID",
+                      "VALUE": "1"
+                   },
+                   {
+                      "TEXT": "@@ROLE_NAME",
+                      "VALUE": "Admin User"
+                   }
+                ]
+}
+</code>
+</pre>
