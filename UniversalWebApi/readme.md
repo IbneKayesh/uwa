@@ -11,7 +11,7 @@
   "SF_RETN": "GET",
   "PARAM_LIST": [
                     {
-                      "TEXT": "@@PROJ_ID",
+                      "TEXT": "@PROJ_ID",
                       "VALUE": "1"
                     }
                 ]
@@ -40,11 +40,11 @@
   "SF_RETN": "POST",
   "PARAM_LIST": [
                    {
-                      "TEXT": "@@ID",
+                      "TEXT": "@ID",
                       "VALUE": "1"
                    },
                    {
-                      "TEXT": "@@ROLE_NAME",
+                      "TEXT": "@ROLE_NAME",
                       "VALUE": "Admin User"
                    }
                 ]
