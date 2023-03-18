@@ -1,4 +1,0 @@
- {
-        "SIZE":0,
-        "SQL":"SELECT * FROM WS_BOARD WHERE PROJ_ID=@PROJ_ID"
-}

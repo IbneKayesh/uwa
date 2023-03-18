@@ -3,26 +3,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace UniversalWebApi.Models
 {
-    public class SF_STYLER
+    public class UWA_BODY
     {
         /// <summary>
-        /// SF Name [DB-SQL]
+        /// SQL File Id
+        /// tableName.sql_id
         /// </summary>
-        [Display(Name = "SF Name")]
         [Required(ErrorMessage = "{0} is required")]
-        public string SF_NAME { get; set; }
-
+        public string RESOURCE { get; set; }
         /// <summary>
-        /// Data Table Return
+        /// SF Method - GET or SET
         /// </summary>
-        [Display(Name = "SF Return Datatable")]
+        [Display(Name = "Method")]
         [Required(ErrorMessage = "{0} is required")]
-        public string SF_RETN { get; set; }
+        public string METHOD { get; set; }
 
-        /// <summary>
-        /// SF Parameter List 
-        /// </summary>
-        [Display(Name = "Parameter List")]
+        [Display(Name = "Parameters")]
         [Required(ErrorMessage = "{0} is required")]
         public List<PARAM> PARAM_LIST { get; set; }
     }

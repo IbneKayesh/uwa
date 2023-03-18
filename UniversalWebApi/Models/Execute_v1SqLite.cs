@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.SQLite;
 
 namespace UniversalWebApi.Models
 {
-    public class Execute_v1
+    public class Execute_v1SqLite
     {
+        static string dbSource = "Data source=";
         public static EQResultTable_v1 ExecuteQuery(string _conStr, string _command, object[] _parameters = null)
         {
             EQResult_v1 result = new EQResult_v1();
@@ -13,11 +14,11 @@ namespace UniversalWebApi.Models
             result.MESSAGES = AppKeys_v1.SUCCESS_MESSAGES;
 
             DataSet ds = new DataSet();
-            SqlDataAdapter da = new SqlDataAdapter();
-            SqlConnection con = new SqlConnection(_conStr);
+            SQLiteDataAdapter da = new SQLiteDataAdapter();
+            SQLiteConnection con = new SQLiteConnection(dbSource + _conStr);
             try
             {
-                SqlCommand cmd = new SqlCommand(_command, con);
+                SQLiteCommand cmd = new SQLiteCommand(_command, con);
                 if (_parameters != null)
                 {
                     cmd.Parameters.AddRange(_parameters);
@@ -27,7 +28,7 @@ namespace UniversalWebApi.Models
                 da.SelectCommand = cmd;
                 da.Fill(ds);
             }
-            catch (SqlException ex)
+            catch (SQLiteException ex)
             {
                 result.SUCCESS = false;
                 result.MESSAGES = ex.Message;
@@ -46,9 +47,9 @@ namespace UniversalWebApi.Models
         public static EQResult_v1 ExecuteSF(string _conStr, List<SQL_PLIST_v1> _sf)
         {
             EQResult_v1 result = new EQResult_v1();
-            SqlConnection con = new SqlConnection(_conStr);
-            SqlCommand cmd = new SqlCommand();
-            SqlTransaction trn;
+            SQLiteConnection con = new SQLiteConnection(dbSource + _conStr);
+            SQLiteCommand cmd = new SQLiteCommand();
+            SQLiteTransaction trn;
             con.Open();
             cmd.Connection = con;
             cmd.CommandTimeout = int.MaxValue;
@@ -75,7 +76,7 @@ namespace UniversalWebApi.Models
                 result.MESSAGES = AppKeys_v1.SUCCESS_MESSAGES;
                 result.ROWS = r;
             }
-            catch (SqlException ex)
+            catch (SQLiteException ex)
             {
                 trn.Rollback();
                 result.SUCCESS = false;
