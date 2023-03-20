@@ -179,18 +179,25 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UWAController.cs" />
+    <Compile Include="Controllers\UWAv1Controller.cs" />
+    <Compile Include="Controllers\UWAv2Controller.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelsV2\EQResultSet_v2.cs" />
+    <Compile Include="ModelsV2\EQResultSet_v02.cs" />
+    <Compile Include="ModelsV2\EQResult_v02.cs" />
+    <Compile Include="ModelsV2\Execute_v2.cs" />
+    <Compile Include="ModelsV2\SQL_PLIST_v2.cs" />
+    <Compile Include="ModelsV2\UWA_BODY_D.cs" />
+    <Compile Include="ModelsV2\UWA_BODY_M.cs" />
     <Compile Include="Models\AppKeys_v1.cs" />
     <Compile Include="Models\EQResultTable_v1.cs" />
     <Compile Include="Models\EQResult_v1.cs" />
     <Compile Include="Models\Execute_v1SqLite.cs" />
     <Compile Include="Models\Execute_v1.cs" />
     <Compile Include="Models\PARAM.cs" />
-    <Compile Include="Models\RequestHeaders.cs" />
     <Compile Include="Models\SQL_PLIST_v1.cs" />
     <Compile Include="Models\UWA_BODY.cs" />
     <Compile Include="Models\UWA_CONNECTION.cs" />
@@ -199,6 +206,8 @@
     <Compile Include="Models\UWA_SQL.cs" />
     <Compile Include="Models\UWA_BRANCH.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ApiDb.cs" />
+    <Compile Include="Services\RequestHeaders.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

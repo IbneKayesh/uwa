@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -14,7 +12,7 @@ using UniversalWebApi.Models;
 
 namespace UniversalWebApi.Controllers
 {
-    public class UWAController : ApiController
+    public class UWAv1Controller : ApiController
     {
         [HttpPost]
         [HttpOptions]
@@ -25,11 +23,11 @@ namespace UniversalWebApi.Controllers
             if (ModelState.IsValid && uwa_body != null)
             {
                 //header
-                UWA_HEADER header = RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+                UWA_HEADER header =Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
 
                 bool IsValidAuth = true;
-                UWA_BRANCH Branch_Auth = getBranch(header);
-                List<UWA_CONNECTION> ConnectList = getActiveConnection(header.BRANCH_TOKEN, header.PAYLOAD_TOKEN);
+                UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
+                List<UWA_CONNECTION> ConnectList = Services.ApiDb.getActiveConnection(header.BRANCH_TOKEN, header.PAYLOAD_TOKEN);
                
                 if (Branch_Auth.BRANCH_STATUS == 1)
                 {
@@ -62,10 +60,10 @@ namespace UniversalWebApi.Controllers
                     return new EQResultTable_v1() { Result = { SUCCESS = false, ROWS = 0, MESSAGES = "Login expired" } };
                 }
 
-                UWA_PAYLOAD payload = getDbConnectionString(header.PAYLOAD_TOKEN);
+                UWA_PAYLOAD payload = Services.ApiDb.getDbConnectionString(header.PAYLOAD_TOKEN);
 
                 //body
-                string sql = GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
+                string sql = Services.ApiDb.GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
                 var inParams = new List<SqlParameter>();
                 foreach (PARAM param in uwa_body.PARAM_LIST)
                 {
@@ -93,71 +91,11 @@ namespace UniversalWebApi.Controllers
             return new EQResultTable_v1();
         }
 
-        private UWA_PAYLOAD getDbConnectionString(string payloadId)
-        {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
-            string sql = "SELECT * FROM UWA_PAYLOAD WHERE PAYLOAD_ID=@PAYLOAD_ID";
-            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
-            parameters.Add(new SQLiteParameter("@PAYLOAD_ID", payloadId));
-            EQResultTable_v1 dbObj = Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
-            if (dbObj.Result.SUCCESS && dbObj.Result.ROWS == 1)
-            {
-                UWA_PAYLOAD obj = new UWA_PAYLOAD();
-                obj.PAYLOAD_ID = dbObj.Table.Rows[0]["PAYLOAD_ID"].ToString();
-                obj.DB_CONNECTION = dbObj.Table.Rows[0]["DB_CONNECTION"].ToString();
-                obj.DB_DESC = dbObj.Table.Rows[0]["DB_DESC"].ToString();
-                obj.PAYLOAD_TABLE = dbObj.Table.Rows[0]["PAYLOAD_TABLE"].ToString();
-                return obj;
-            }
-            else
-            {
-                return new UWA_PAYLOAD() { DB_DESC = AppKeys_v1.INVALID_PAYLOAD_TOKEN };
-            }
-        }
+     
 
-        private string GetSqlFile(string resource, string dbPath)
-        {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+   
 
-            string sql_file_name = resource.Split('.')[0];
-            string sql_file_id = resource.Split('.')[1];
-
-            string sql = $"SELECT * FROM {dbPath}_{sql_file_name} WHERE ID=@ID";
-            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
-            parameters.Add(new SQLiteParameter("@ID", sql_file_id));
-            EQResultTable_v1 dbObj = Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
-            if (dbObj.Result.SUCCESS && dbObj.Result.ROWS == 1)
-            {
-                return dbObj.Table.Rows[0]["SQL"].ToString();
-            }
-            else
-            {
-                return AppKeys_v1.INVALID_RESOURCE_TOKEN;
-            }
-        }
-
-        private UWA_BRANCH getBranch(UWA_HEADER header)
-        {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
-            string sql = "SELECT * FROM UWA_BRANCH B WHERE B.BRANCH_ID=@BRANCH_ID AND PAYLOAD_ID=@PAYLOAD_ID";
-            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
-            parameters.Add(new SQLiteParameter("@BRANCH_ID", header.BRANCH_TOKEN));
-            parameters.Add(new SQLiteParameter("@PAYLOAD_ID", header.PAYLOAD_TOKEN));
-            EQResultTable_v1 dbObj = Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
-            if (dbObj.Result.SUCCESS && dbObj.Result.ROWS == 1)
-            {
-                UWA_BRANCH obj = new UWA_BRANCH();
-                obj.PAYLOAD_ID = dbObj.Table.Rows[0]["PAYLOAD_ID"].ToString();
-                obj.BRANCH_ID = dbObj.Table.Rows[0]["BRANCH_ID"].ToString();
-                obj.BRANCH_DESC = dbObj.Table.Rows[0]["BRANCH_DESC"].ToString();
-                obj.BRANCH_STATUS = Convert.ToInt32(dbObj.Table.Rows[0]["BRANCH_STATUS"]);
-                return obj;
-            }
-            else
-            {
-                return new UWA_BRANCH() { BRANCH_DESC = AppKeys_v1.INVALID_BRANCH_TOKEN };
-            }
-        }
+      
 
 
 
@@ -175,40 +113,7 @@ namespace UniversalWebApi.Controllers
             objSql.iPARAMS = inParams.ToArray();
             Execute_v1SqLite.ExecuteSF(file, new List<SQL_PLIST_v1> { objSql });
         }
-        public static List<UWA_CONNECTION> getActiveConnection(string branchId, string payloadId)
-        {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
-
-            List<UWA_CONNECTION> objects = new List<UWA_CONNECTION>();
-
-            string sql = "SELECT * FROM UWA_CONNECTION WHERE PAYLOAD_ID=@PAYLOAD_ID AND BRANCH_ID=@BRANCH_ID";
-            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
-            parameters.Add(new SQLiteParameter("@PAYLOAD_ID", payloadId));
-            parameters.Add(new SQLiteParameter("@BRANCH_ID", branchId));
-            EQResultTable_v1 dbObj = Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
-            if (dbObj.Result.SUCCESS && dbObj.Result.ROWS > 0)
-            {
-                foreach (DataRow row in dbObj.Table.Rows)
-                {
-                    UWA_CONNECTION obj = new UWA_CONNECTION
-                    {
-                        BRANCH_ID = row["BRANCH_ID"].ToString(),
-                        BRANCH_TOKEN = row["BRANCH_TOKEN"].ToString(),
-                        CREATE_TIME = Convert.ToDateTime(row["CREATE_TIME"]),
-                        END_TIME = Convert.ToDateTime(row["END_TIME"])
-                    };
-                    objects.Add(obj);
-                }
-            }
-            return objects;
-        }
-
-
-
-
-
-
-
+     
 
         //Login authorization
 
@@ -219,11 +124,11 @@ namespace UniversalWebApi.Controllers
         public EQResultTable_v1 v1_Login()
         {
             //header
-            UWA_HEADER header = RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+            UWA_HEADER header = Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
 
             string branchName = header.BRANCH_TOKEN;
             string branchToken = Guid.NewGuid().ToString();
-            UWA_BRANCH Branch_Auth = getBranch(header);
+            UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
 
             UWA_CONNECTION con = new UWA_CONNECTION();
             con.PAYLOAD_ID = header.PAYLOAD_TOKEN;
@@ -269,12 +174,12 @@ namespace UniversalWebApi.Controllers
             if (ModelState.IsValid && uwa_body != null)
             {
                 //header
-                UWA_HEADER header = RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+                UWA_HEADER header = Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
 
-                UWA_PAYLOAD payload = getDbConnectionString(header.PAYLOAD_TOKEN);
+                UWA_PAYLOAD payload = Services.ApiDb.getDbConnectionString(header.PAYLOAD_TOKEN);
 
                 //body
-                string sql = GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
+                string sql = Services.ApiDb.GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
 
 
                 if (uwa_body.METHOD == AppKeys_v1.RETURN_TYPE_GET)
@@ -323,5 +228,8 @@ namespace UniversalWebApi.Controllers
             }
             return parameters;
         }
+
+
+
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace UniversalWebApi.Models
+﻿namespace UniversalWebApi.Models
 {
     //Author: Md. Ibne Kayesh
     //Framework: ASP.NET MVC

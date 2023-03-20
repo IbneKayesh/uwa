@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Net.Http.Headers;
+using UniversalWebApi.Models;
 
-namespace UniversalWebApi.Models
+namespace UniversalWebApi.Services
 {
     public class RequestHeaders
     {
