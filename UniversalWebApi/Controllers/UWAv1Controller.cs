@@ -15,65 +15,87 @@ namespace UniversalWebApi.Controllers
     public class UWAv1Controller : ApiController
     {
         [HttpPost]
-        [HttpOptions]
+        //[HttpOptions]
         [Route("api/v1/Execute")]
         [ResponseType(typeof(EQResultTable_v1))]
         public EQResultTable_v1 v1_Execute(UWA_BODY uwa_body)
         {
+            EQResultTable_v1 retObj = new EQResultTable_v1();
+
             if (ModelState.IsValid && uwa_body != null)
             {
-                //header
-                UWA_HEADER header =Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+                //find header information
+                UWA_HEADER header = Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+                //validate header
+                if (!header.IS_VALID)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Header token was not provided" };
+                    return retObj;
+                }
+                //find branch/user information
+                UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
+                //validate branch information
+                if (Branch_Auth.BRANCH_DESC == AppKeys_v1.INVALID_BRANCH_TOKEN)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid payload or branch token" };
+                    return retObj;
+                }
 
                 bool IsValidAuth = true;
-                UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
-                List<UWA_CONNECTION> ConnectList = Services.ApiDb.getActiveConnection(header.BRANCH_TOKEN, header.PAYLOAD_TOKEN);
-               
-                if (Branch_Auth.BRANCH_STATUS == 1)
+                // auth single or multiple, 1 or 2
+                if (Branch_Auth.BRANCH_STATUS > 0)
                 {
-                    if (ConnectList.Count > 0)
+                    var ConnectList = Services.ApiDb.getActiveConnection(header.BRANCH_TOKEN, header.PAYLOAD_TOKEN);
+                    //single auth
+                    if (Branch_Auth.BRANCH_STATUS == 1 && ConnectList.Count == 1)
                     {
-                        if (header.BRANCH_TOKEN != ConnectList.First().BRANCH_TOKEN)
-                        {
-                            IsValidAuth = false;
-                        }
+                        IsValidAuth = (header.BRANCH_TOKEN == ConnectList.First().BRANCH_TOKEN);
+                    }
+                    //multiple auth
+                    else if (Branch_Auth.BRANCH_STATUS > 1 && ConnectList.Count > 0)
+                    {
+                        IsValidAuth = (header.BRANCH_TOKEN == ConnectList.First().BRANCH_TOKEN);
                     }
                     else
                     {
                         IsValidAuth = false;
                     }
                 }
-                else if (Branch_Auth.BRANCH_STATUS == 2)
-                {
-                    if (ConnectList.Count > 0)
-                    {
-                        IsValidAuth = ConnectList.Any(x => x.BRANCH_TOKEN == header.BRANCH_TOKEN);
-                    }
-                    else
-                    {
-                        IsValidAuth = false;
-                    }
-                }
-
+                //validate auth
                 if (!IsValidAuth)
                 {
-                    return new EQResultTable_v1() { Result = { SUCCESS = false, ROWS = 0, MESSAGES = "Login expired" } };
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Session is expired, Please Login" };
+                    return retObj;
+                }
+                //find payload or database connections
+                UWA_PAYLOAD payload = Services.ApiDb.getDbConnectionString(header.PAYLOAD_TOKEN);
+                //validate branch information
+                if (payload.DB_DESC == AppKeys_v1.INVALID_PAYLOAD_TOKEN)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = payload.DB_DESC };
+                    return retObj;
                 }
 
-                UWA_PAYLOAD payload = Services.ApiDb.getDbConnectionString(header.PAYLOAD_TOKEN);
-
-                //body
+                //find SQL query
                 string sql = Services.ApiDb.GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
+                //validate sql query
+                if (sql == AppKeys_v1.INVALID_RESOURCE_TOKEN)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = sql };
+                    return retObj;
+                }
+                //bind query and parameters
                 var inParams = new List<SqlParameter>();
                 foreach (PARAM param in uwa_body.PARAM_LIST)
                 {
                     inParams.Add(new SqlParameter(param.TEXT, param.VALUE));
                 }
-
+                //GET
                 if (uwa_body.METHOD == AppKeys_v1.RETURN_TYPE_GET)
                 {
                     return Execute_v1.ExecuteQuery(payload.DB_CONNECTION, sql, inParams.ToArray());
                 }
+                //POST
                 else if (uwa_body.METHOD == AppKeys_v1.RETURN_TYPE_POST)
                 {
                     SQL_PLIST_v1 obj = new SQL_PLIST_v1();
@@ -84,52 +106,48 @@ namespace UniversalWebApi.Controllers
                 }
                 else
                 {
-                    return new EQResultTable_v1();
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid Method" };
+                    return retObj;
                 }
             }
-
-            return new EQResultTable_v1();
+            retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid body parameters" };
+            return retObj;
         }
 
-     
 
-   
-
-      
-
-
-
-        public static void WriteConnection(UWA_CONNECTION obj, bool isSingle = true)
-        {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
-            SQL_PLIST_v1 objSql = new SQL_PLIST_v1();
-            objSql.SQL = "INSERT INTO UWA_CONNECTION(PAYLOAD_ID,BRANCH_ID,BRANCH_TOKEN,CREATE_TIME,END_TIME)VALUES(@PAYLOAD_ID,@BRANCH_ID,@BRANCH_TOKEN,@CREATE_TIME,@END_TIME)";
-            var inParams = new List<SQLiteParameter>();
-            inParams.Add(new SQLiteParameter("@PAYLOAD_ID", obj.PAYLOAD_ID));
-            inParams.Add(new SQLiteParameter("@BRANCH_ID", obj.BRANCH_ID));
-            inParams.Add(new SQLiteParameter("@BRANCH_TOKEN", obj.BRANCH_TOKEN));
-            inParams.Add(new SQLiteParameter("@CREATE_TIME", obj.CREATE_TIME));
-            inParams.Add(new SQLiteParameter("@END_TIME", obj.END_TIME));
-            objSql.iPARAMS = inParams.ToArray();
-            Execute_v1SqLite.ExecuteSF(file, new List<SQL_PLIST_v1> { objSql });
-        }
-     
 
         //Login authorization
 
         [HttpPost]
-        [HttpOptions]
+        //[HttpOptions]
         [Route("api/v1/Login")]
         [ResponseType(typeof(EQResultTable_v1))]
         public EQResultTable_v1 v1_Login()
         {
-            //header
+            EQResultTable_v1 retObj = new EQResultTable_v1();
+            //find header information
             UWA_HEADER header = Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
+            //validate header
+            if (!header.IS_VALID)
+            {
+                retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Header token was not provided" };
+                return retObj;
+            }
+
 
             string branchName = header.BRANCH_TOKEN;
             string branchToken = Guid.NewGuid().ToString();
-            UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
 
+            //find branch/user information
+            UWA_BRANCH Branch_Auth = Services.ApiDb.getBranch(header);
+            //validate branch information
+            if (Branch_Auth.BRANCH_DESC == AppKeys_v1.INVALID_BRANCH_TOKEN)
+            {
+                retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid payload or branch token" };
+                return retObj;
+            }
+
+            //write branch session
             UWA_CONNECTION con = new UWA_CONNECTION();
             con.PAYLOAD_ID = header.PAYLOAD_TOKEN;
             con.BRANCH_ID = branchName;
@@ -139,11 +157,11 @@ namespace UniversalWebApi.Controllers
 
             if (Branch_Auth.BRANCH_STATUS == 1)
             {
-                WriteConnection(con);
+                Services.ApiDb.WriteConnection(con);
             }
             else if (Branch_Auth.BRANCH_STATUS == 2)
             {
-                WriteConnection(con, false);
+                Services.ApiDb.WriteConnection(con, false);
             }
 
 
@@ -163,28 +181,64 @@ namespace UniversalWebApi.Controllers
         }
 
 
+
+
+
+
+
+
+
+
+
         //Help Endpoint
 
         [HttpPost]
-        [HttpOptions]
+        //[HttpOptions]
         [Route("api/v1/Parameters")]
         [ResponseType(typeof(EQResultTable_v1))]
         public EQResultTable_v1 v1_Parameters(UWA_BODY uwa_body)
         {
+            EQResultTable_v1 retObj = new EQResultTable_v1();
+
             if (ModelState.IsValid && uwa_body != null)
             {
-                //header
+                //find header information
                 UWA_HEADER header = Services.RequestHeaders.FromHttpRequestHeaders(this.Request.Headers);
-
+                //validate header
+                if (!header.IS_VALID)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Header token was not provided" };
+                    return retObj;
+                }
+                //find payload or database connections
                 UWA_PAYLOAD payload = Services.ApiDb.getDbConnectionString(header.PAYLOAD_TOKEN);
+                //validate branch information
+                if (payload.DB_DESC == AppKeys_v1.INVALID_PAYLOAD_TOKEN)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = payload.DB_DESC };
+                    return retObj;
+                }
 
-                //body
+                //find SQL query
                 string sql = Services.ApiDb.GetSqlFile(uwa_body.RESOURCE, payload.PAYLOAD_TABLE);
+                //validate sql query
+                if (sql == AppKeys_v1.INVALID_RESOURCE_TOKEN)
+                {
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = sql };
+                    return retObj;
+                }
 
-
+                //GET
                 if (uwa_body.METHOD == AppKeys_v1.RETURN_TYPE_GET)
                 {
                     EQResultTable_v1 returnTable = new EQResultTable_v1();
+                    int part = uwa_body.RESOURCE.Split('.').Count();
+                    if (part != 3)
+                    {
+                        //table . sql id . parameter
+                        retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = AppKeys_v1.INVALID_RESOURCE_TOKEN };
+                        return retObj;
+                    }
                     List<string> paramList = FindSqlParameters(sql, uwa_body.RESOURCE.Split('.')[2]);
                     int i = 0;
                     DataTable dataTable = new DataTable();
@@ -211,11 +265,12 @@ namespace UniversalWebApi.Controllers
                 }
                 else
                 {
-                    return new EQResultTable_v1();
+                    retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid Method" };
+                    return retObj;
                 }
             }
-
-            return new EQResultTable_v1();
+            retObj.Result = new EQResult_v1() { SUCCESS = false, MESSAGES = "Invalid body parameters" };
+            return retObj;
         }
         public static List<string> FindSqlParameters(string sql, string separator)
         {

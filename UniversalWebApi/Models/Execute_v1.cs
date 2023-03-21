@@ -14,9 +14,10 @@ namespace UniversalWebApi.Models
 
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
-            SqlConnection con = new SqlConnection(_conStr);
+            SqlConnection con = new SqlConnection();
             try
             {
+                con = new SqlConnection(_conStr);
                 SqlCommand cmd = new SqlCommand(_command, con);
                 if (_parameters != null)
                 {

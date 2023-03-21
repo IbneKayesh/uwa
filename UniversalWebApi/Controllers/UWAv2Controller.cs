@@ -59,7 +59,7 @@ namespace UniversalWebApi.Controllers
 
                 //body
                 List<SQL_PLIST_v2> _sqlParam = new List<SQL_PLIST_v2>();
-                foreach (UWA_BODY_D item in uwa_body.UWA_BODY_D)
+                foreach (UWA_BODY_D item in uwa_body.DATA_BODY)
                 {
                     SQL_PLIST_v2 obj = new SQL_PLIST_v2();
                     obj.TABLE = item.RESULT_TABLE;

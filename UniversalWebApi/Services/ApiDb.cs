@@ -99,5 +99,31 @@ namespace UniversalWebApi.Services
                 return AppKeys_v1.INVALID_RESOURCE_TOKEN;
             }
         }
+        public static void WriteConnection(UWA_CONNECTION obj, bool isSingle = true)
+        {
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            SQL_PLIST_v1 objSql = new SQL_PLIST_v1();
+            List<SQLiteParameter> inParams = new List<SQLiteParameter>();
+            if (isSingle)
+            {
+                objSql.SQL = "DELETE FROM UWA_CONNECTION WHERE PAYLOAD_ID=@PAYLOAD_ID AND BRANCH_ID=@BRANCH_ID";
+                inParams = new List<SQLiteParameter>();
+                inParams.Add(new SQLiteParameter("@PAYLOAD_ID", obj.PAYLOAD_ID));
+                inParams.Add(new SQLiteParameter("@BRANCH_ID", obj.BRANCH_ID));
+                objSql.iPARAMS = inParams.ToArray();
+                Execute_v1SqLite.ExecuteSF(file, new List<SQL_PLIST_v1> { objSql });
+            }
+
+            objSql = new SQL_PLIST_v1();
+            objSql.SQL = "INSERT INTO UWA_CONNECTION(PAYLOAD_ID,BRANCH_ID,BRANCH_TOKEN,CREATE_TIME,END_TIME)VALUES(@PAYLOAD_ID,@BRANCH_ID,@BRANCH_TOKEN,@CREATE_TIME,@END_TIME)";
+            inParams = new List<SQLiteParameter>();
+            inParams.Add(new SQLiteParameter("@PAYLOAD_ID", obj.PAYLOAD_ID));
+            inParams.Add(new SQLiteParameter("@BRANCH_ID", obj.BRANCH_ID));
+            inParams.Add(new SQLiteParameter("@BRANCH_TOKEN", obj.BRANCH_TOKEN));
+            inParams.Add(new SQLiteParameter("@CREATE_TIME", obj.CREATE_TIME));
+            inParams.Add(new SQLiteParameter("@END_TIME", obj.END_TIME));
+            objSql.iPARAMS = inParams.ToArray();
+            Execute_v1SqLite.ExecuteSF(file, new List<SQL_PLIST_v1> { objSql });
+        }
     }
 }
