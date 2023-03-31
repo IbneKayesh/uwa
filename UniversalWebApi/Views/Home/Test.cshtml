@@ -1,0 +1,298 @@
+﻿@model  UniversalWebApi.Controllers.EVNT_LIV_M
+
+@{
+    ViewBag.Title = "Test";
+    Layout = null;
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+    @*<style>
+            .collapsed i:before {
+                content: "\F285";
+            }
+        </style>*@
+
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            // change icon when collapse is shown/hidden
+            $('.accordion-toggle').on('click', function () {
+                $(this).find('i').toggleClass('bi-chevron-right bi-chevron-down');
+            });
+        });
+    </script>
+}
+<div class="col-md-12">
+    <table class="table table-bordered table-sm" style="font-size:small">
+        <thead>
+            <tr class="bg-primary">
+                <th>RFQ No</th>
+                <th>RFQ Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.RFQ_NO</td>
+                <td>@Model.RFQ_NAME</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table class="table table-striped table-hover table-condensed" style="font-size:small">
+                        <thead>
+                            <tr class="bg-info">
+                                <th>Item</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Attachment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.EVNT_LIV_ITM)
+                            {
+                                <tr data-toggle="collapse" data-target="#i-@item.ITEM_ID" class="accordion-toggle">
+                                    <td><i class="bi bi-chevron-right"></i> @item.ITEM_ID</td>
+                                    <td>@item.ITEM_NAME</td>
+                                    <td>@item.ITEM_DESC</td>
+                                    <td>@item.ITEM_QTY</td>
+                                    <td>@item.ITEM_RATE</td>
+                                    <td>@item.ITEM_AMT</td>
+                                    <td>
+                                        @if (item.ITEM_FILE != "N")
+                                        {
+                                            <i class="bi bi-paperclip"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-question-lg"></i>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="accordian-body collapse" id="i-@item.ITEM_ID">
+
+                                            <table class="table table-condensed table-hover table-sm" style="font-size:small">
+                                                <thead>
+                                                    <tr class="bg-warning">
+                                                        <th>Vendor</th>
+                                                        <th><i class="bi bi-award-fill"></i></th>
+                                                        <th>Invite Date</th>
+                                                        <th>Status</th>
+                                                        <th>Response Date</th>
+                                                        <th>Resp Qty</th>
+                                                        <th>Resp Rate</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var vendor in item.EVNT_LIV_RSP.OrderByDescending(x => x.RESP_STATUS))
+                                                    {
+                                                        <tr data-toggle="collapse" data-target="#v-@vendor.VENDOR_ID" class="accordion-toggle bg-success">
+                                                            <td><i class="bi bi-chevron-right"></i> @vendor.ORGANIZATION_NAME</td>
+                                                            <td>@vendor.RATINGS_VALUE/10</td>
+                                                            <td>@vendor.INVITE_DATE</td>
+                                                            <td>
+                                                                @if (vendor.RESP_STATUS == "Y")
+                                                                {
+                                                                    <i class="bi bi-diamond-fill text-success"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="bi bi-diamond text-danger"></i>
+                                                                }
+                                                            </td>
+                                                            <td>@vendor.RESP_DATE</td>
+                                                            <td>@vendor.RESP_QTY</td>
+                                                            <td>@vendor.RESP_RATE</td>
+                                                            <td>@vendor.RESP_AMT</td>
+                                                        </tr>
+                                                        if (vendor.EVNT_LIV_LOG.First().NEG_ID != null)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="8">
+
+                                                                    <div class="accordian-body collapse" id="v-@vendor.VENDOR_ID">
+                                                                        <table class="table table-bordered table-striped table-sm" style="font-size:small">
+                                                                            <thead>
+                                                                                <tr class="bg-danger">
+                                                                                    <th><i class="bi bi-cart-check"></i></th>
+                                                                                    <th><i class="bi bi-credit-card-2-back"></i></th>
+                                                                                    <th><i class="bi bi-plus-circle"></i></th>
+                                                                                    <th><i class="bi bi-cart-check-fill"></i></th>
+                                                                                    <th><i class="bi bi-credit-card-2-back-fill"></i></th>
+                                                                                    <th><i class="bi bi-plus-circle-fill"></i></th>
+                                                                                    <th><i class="bi bi-chat"></i></th>
+                                                                                    <th><i class="bi bi-check2-all"></i></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var item_log in vendor.EVNT_LIV_LOG.OrderBy(x => x.NEG_ID))
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@item_log.PROP_QTY</td>
+                                                                                        <td>@item_log.PROP_RATE</td>
+                                                                                        <td>@item_log.PROP_AMT</td>
+                                                                                        <td>@item_log.RESP_QTY</td>
+                                                                                        <td>@item_log.RESP_RATE</td>
+                                                                                        <td>@item_log.RESP_AMT</td>
+                                                                                        <td>@item_log.RESP_NOTE</td>
+                                                                                        <td>
+                                                                                            @if (item_log.IS_ACTIVE == "1")
+                                                                                            {
+                                                                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                                                            }
+                                                                                            else if (item_log.IS_ACTIVE == "9")
+                                                                                            {
+                                                                                                <i class="bi bi-send-fill text-primary"></i>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <i class="bi bi-slash-circle text-danger"></i>
+                                                                                            }
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    @*@{
+            var rfq_item_list = Model.GroupBy(x => x.ITEM_ID);
+            <table class="table table-condensed table-sm">
+                @foreach (var rfq_item in rfq_item_list)
+                {
+                    <thead>
+                        <tr class="bg-primary">
+                            <th>Item</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Qty</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-toggle="collapse" data-target="#@rfq_item.First().ITEM_ID" class="accordion-toggle">
+                            <td>
+                                <i class="bi bi-chevron-right"></i>
+                                @rfq_item.First().ITEM_ID
+                            </td>
+                            <td>@rfq_item.First().ITEM_NAME</td>
+                            <td>@rfq_item.First().ITEM_DESC</td>
+                            <td>@rfq_item.First().ITEM_QTY</td>
+                            <td>@rfq_item.First().ITEM_RATE</td>
+                            <td>@rfq_item.First().ITEM_AMT</td>
+                        </tr>
+                        @{var vendor_list = rfq_item.GroupBy(x => x.VENDOR_ID);}
+                        <tr>
+                            <td colspan="6" class="hiddenRow">
+                                <div class="accordian-body collapse" id="@vendor_list.FirstOrDefault().First().ITEM_ID">
+                                    <table class="table table-condensed table-sm">
+                                        <thead>
+                                            <tr class="bg-warning">
+                                                <th>Vendor</th>
+                                                <th>Date</th>
+                                                <th>Qty</th>
+                                                <th>Rate</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var vendor in vendor_list)
+                                            {
+                                                <tr data-toggle="collapse" data-target="#@vendor.First().VENDOR_ID-@vendor.First().ITEM_ID" class="accordion-toggle bg-success">
+                                                    <th>
+                                                        <i class="bi bi-chevron-right"></i>
+                                                        @vendor.First().ORGANIZATION_NAME
+                                                    </th>
+                                                    <th>@vendor.First().INVITE_DATE</th>
+                                                    <th>@vendor.First().RESP_QTY</th>
+                                                    <th>@vendor.First().RESP_RATE</th>
+                                                    <th>@vendor.First().RESP_AMT</th>
+                                                    <th>@vendor.First().RESP_STATUS</th>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7" class="hiddenRow">
+                                                        <div class="accordian-body collapse" id="@vendor.FirstOrDefault().VENDOR_ID-@vendor.First().ITEM_ID">
+                                                            <table class="table table-condensed table-sm">
+                                                                <thead>
+                                                                    <tr class="bg-danger">
+                                                                        <th>Negotiate Id</th>
+                                                                        <th>Note</th>
+                                                                        <th>Qty</th>
+                                                                        <th>Rate</th>
+                                                                        <th>Amount</th>
+                                                                        <th>Status</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var neg_item in vendor)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>
+                                                                                @if (neg_item.IS_ACTIVE == "1")
+                                                                                {
+                                                                                    <i class="bi bi-check-circle-fill"></i>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <i class="bi bi-slash-circle"></i>
+                                                                                }
+                                                                                @neg_item.NEG_ID
+                                                                            </td>
+                                                                            <td>@neg_item.RESP_NOTE</td>
+                                                                            <td>@neg_item.RESP_QTY</td>
+                                                                            <td>@neg_item.RESP_RATE</td>
+                                                                            <td>@neg_item.RESP_AMT</td>
+                                                                            <td>@neg_item.IS_ACTIVE</td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                            }
+            </table>
+        }*@
+</div>

@@ -178,7 +178,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CorsAttribute.cs" />
+    <Compile Include="Controllers\EVNT_LIVE_MASTER.cs" />
+    <Compile Include="Controllers\EVNT_LIV_ITM.cs" />
+    <Compile Include="Controllers\EVNT_LIV_LOG.cs" />
+    <Compile Include="Controllers\EVNT_LIV_M.cs" />
+    <Compile Include="Controllers\EVNT_LIV_RSP.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SevEF_v1.cs" />
     <Compile Include="Controllers\UWAv1Controller.cs" />
     <Compile Include="Controllers\UWAv2Controller.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -239,6 +246,7 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="readme.html" />
     <Content Include="apiFile\v1\uwav1.uwa.db" />
+    <None Include="Properties\PublishProfiles\uwapiPublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -260,6 +268,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

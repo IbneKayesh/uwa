@@ -11,9 +11,9 @@ namespace UniversalWebApi.Services
             UWA_HEADER requestHeaders = new UWA_HEADER();
             requestHeaders.IS_VALID = true;
 
-            if (headers.Contains("payload-index"))
+            if (headers.Contains("payloadIndex"))
             {
-                requestHeaders.PAYLOAD_TOKEN = headers.GetValues("payload-index").First();
+                requestHeaders.PAYLOAD_TOKEN = headers.GetValues("payloadIndex").First();
             }
             else
             {
@@ -22,9 +22,9 @@ namespace UniversalWebApi.Services
             }
 
 
-            if (headers.Contains("branch-index"))
+            if (headers.Contains("branchIndex"))
             {
-                requestHeaders.BRANCH_TOKEN = headers.GetValues("branch-index").First();
+                requestHeaders.BRANCH_TOKEN = headers.GetValues("branchIndex").First();
             }
             else
             {

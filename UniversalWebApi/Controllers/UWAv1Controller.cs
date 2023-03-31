@@ -14,6 +14,7 @@ namespace UniversalWebApi.Controllers
 {
     public class UWAv1Controller : ApiController
     {
+        [Cors]
         [HttpPost]
         //[HttpOptions]
         [Route("api/v1/Execute")]
