@@ -1,0 +1,38 @@
+﻿@model IEnumerable<UniversalWebApi.Areas.Manager.Models.DbTableModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+
+<p>
+    <a href="@Url.Action("Create","DbTable", new { Area ="Manager" })" class="btn btn-success btn-xs">Create New</a>
+</p>
+<table class="table table-bordered table-condensed table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PAYLOAD_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TABLE_NAME)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PAYLOAD_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TABLE_NAME)
+            </td>
+            <td>
+                <a href="@Url.Action("Index","TableSql", new { Area ="Manager", id=item.TABLE_NAME  })" class="btn btn-primary btn-xs">View SQL</a>
+            </td>
+        </tr>
+    }
+
+</table>

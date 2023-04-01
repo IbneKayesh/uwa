@@ -127,6 +127,28 @@ namespace UniversalWebApi.Services.Db
             return Execute_v1SqLite.ExecuteSF(file, sqlList);
         }
 
-        
+        public static EQResultTable_v1 GetDbTable(string name)
+        {
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+
+            //show all table
+            sql = $@"SELECT '{name}' PAYLOAD_ID,name TABLE_NAME FROM sqlite_master WHERE type = 'table' and name not in ('UWA_PAYLOAD','UWA_BRANCH','UWA_CONNECTION') AND name like '{name}_%'";
+            return Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
+        }
+
+        public static EQResultTable_v1 GetDbTableSql(string name)
+        {
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+            //show table data
+            sql = $"SELECT '{name}' TABLE_NAME,ID,SQL FROM {name}";
+            return Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
+        }
+
     }
 }

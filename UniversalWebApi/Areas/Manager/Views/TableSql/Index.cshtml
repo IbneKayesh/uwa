@@ -1,0 +1,44 @@
+﻿@model IEnumerable<UniversalWebApi.Areas.Manager.Models.TableSqlModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+
+<p>
+    <a href="@Url.Action("Create","TableSql", new { Area ="Manager" })" class="btn btn-success btn-xs">Create New</a>
+</p>
+<table class="table table-bordered table-condensed table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TABLE_NAME)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SQL)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TABLE_NAME)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SQL)
+            </td>
+            <td>
+                <a href="@Url.Action("Create","Payload", new { Area ="Manager", id=item.ID,  table=item.TABLE_NAME })" class="btn btn-primary btn-xs">Edit</a>
+            </td>
+        </tr>
+    }
+
+</table>

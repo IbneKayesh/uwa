@@ -147,7 +147,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Home\Models\" />
     <Folder Include="Areas\Home\Views\Shared\" />
-    <Folder Include="Areas\Manager\Models\" />
     <Folder Include="Areas\Manager\Views\Shared\" />
     <Folder Include="Areas\Mssql\Models\" />
     <Folder Include="Areas\Mssql\Views\Shared\" />
@@ -191,8 +190,12 @@
     <Compile Include="Areas\Home\Controllers\LoginController.cs" />
     <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
     <Compile Include="Areas\Manager\Controllers\BranchController.cs" />
+    <Compile Include="Areas\Manager\Controllers\DbTableController.cs" />
     <Compile Include="Areas\Manager\Controllers\PayloadController.cs" />
+    <Compile Include="Areas\Manager\Controllers\TableSqlController.cs" />
     <Compile Include="Areas\Manager\ManagerAreaRegistration.cs" />
+    <Compile Include="Areas\Manager\Models\DbTableModel.cs" />
+    <Compile Include="Areas\Manager\Models\TableSqlModel.cs" />
     <Compile Include="Areas\Mssql\Controllers\Mssql_v1Controller.cs" />
     <Compile Include="Areas\Mssql\Controllers\Mssql_v2Controller.cs" />
     <Compile Include="Areas\Mssql\MssqlAreaRegistration.cs" />
@@ -269,6 +272,8 @@
     <Content Include="Areas\Manager\Views\Payload\Create.cshtml" />
     <Content Include="Areas\Manager\Views\Branch\Index.cshtml" />
     <Content Include="Areas\Manager\Views\Branch\Create.cshtml" />
+    <Content Include="Areas\Manager\Views\DbTable\Index.cshtml" />
+    <Content Include="Areas\Manager\Views\TableSql\Index.cshtml" />
     <None Include="Properties\PublishProfiles\uwapiPublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
