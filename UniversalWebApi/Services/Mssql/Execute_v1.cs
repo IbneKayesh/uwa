@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using UniversalWebApi.Models;
 
-namespace UniversalWebApi.Models
+namespace UniversalWebApi.Services.Mssql
 {
     public class Execute_v1
     {
@@ -89,6 +90,6 @@ namespace UniversalWebApi.Models
             }
             return result;
         }
-    }
 
+    }
 }

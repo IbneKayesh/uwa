@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using UniversalWebApi.Models;
 
-namespace UniversalWebApi.Services
+namespace UniversalWebApi.Services.Api
 {
     public class RequestHeaders
     {
@@ -34,5 +34,7 @@ namespace UniversalWebApi.Services
 
             return requestHeaders;
         }
+
+
     }
 }

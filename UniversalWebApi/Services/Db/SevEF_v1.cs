@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 
-namespace UniversalWebApi.Controllers
+namespace UniversalWebApi.Services.Db
 {
     public class SevEF_v1
     {
+
         public static List<T> ConvertToList<T>(DataTable dt)
         {
             var columnNames = dt.Columns.Cast<DataColumn>()
@@ -29,7 +29,6 @@ namespace UniversalWebApi.Controllers
                 return objT;
             }).ToList();
         }
-
 
 
     }

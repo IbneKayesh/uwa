@@ -5,9 +5,9 @@ using System.Data.SQLite;
 using System.Web;
 using UniversalWebApi.Models;
 
-namespace UniversalWebApi.Services
+namespace UniversalWebApi.Services.Db
 {
-    public class ApiDb
+    public class ApiStore
     {
         public static UWA_BRANCH getBranch(UWA_HEADER header)
         {

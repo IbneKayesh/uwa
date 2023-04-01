@@ -2,8 +2,9 @@
 using System.Data;
 using System.Data.SqlClient;
 using UniversalWebApi.Models;
+using UniversalWebApi.ModelsV2;
 
-namespace UniversalWebApi.ModelsV2
+namespace UniversalWebApi.Services.Mssql
 {
     public class Execute_v2
     {
