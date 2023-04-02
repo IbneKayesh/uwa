@@ -65,8 +65,8 @@ namespace UniversalWebApi.Areas.Manager.Controllers
         public ActionResult TextJson(string id, string res)
         {
             string json = "{\n";
-            json += $"\"RESOURCE\" : \"{id.Split('_')[1]}.{res}\"\n";
-            json += "\"METHOD\" : \"GET or POST\"\n";
+            json += $"\"RESOURCE\" : \"{id.Split('_')[1]}.{res}\",\n";
+            json += "\"METHOD\" : \"GET or POST\",\n";
             json += "\"PARAM_LIST\" :\t[";
 
             EQResultTable_v1 dbObj = Services.Db.UWA.GetDbTableSqlById(id, res);
@@ -77,7 +77,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                 foreach (string param in paramList)
                 {
                     json += "\n\t\t{\n";
-                    json += $"\t\t\"TEXT\" : \"{param}\"\n";
+                    json += $"\t\t\"TEXT\" : \"{param}\",\n";
                     json += $"\t\t\"VALUE\" : \"Value{i}\"\n";
                     i++;
                     if (i < paramList.Count)
