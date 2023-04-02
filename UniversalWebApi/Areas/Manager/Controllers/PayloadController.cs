@@ -24,6 +24,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
             ViewBag.ButtonType = "Create";
 
             var obj = new UWA_PAYLOAD();
+            obj.PAYLOAD_TABLE = Create_ModuleName();
             if (!string.IsNullOrWhiteSpace(id))
             {
                 EQResultTable_v1 dbObj = Services.Db.UWA.GetByIdPayload(id);
@@ -41,7 +42,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
             var buttonValue = Request.Form["SaveButton"];
             if (ModelState.IsValid)
             {
-                bool isNew = true;           
+                bool isNew = true;
                 if (buttonValue == "Create")
                 {
                     isNew = true;
@@ -61,6 +62,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                 }
             }
             ViewBag.ButtonType = buttonValue;
+            obj.PAYLOAD_TABLE = Create_ModuleName();
             return View(obj);
         }
 
@@ -72,6 +74,11 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                 EQResult_v1 dbObj = UWA.DeletePayload(id);
             }
             return RedirectToAction(nameof(Index));
+        }
+        private string Create_ModuleName()
+        {
+            EQResultTable_v1 dbObj = Services.Db.UWA.GetAllPayload();
+            return "dwa" + (dbObj.Result.ROWS + 1);
         }
     }
 }

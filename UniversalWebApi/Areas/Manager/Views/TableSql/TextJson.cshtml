@@ -1,0 +1,18 @@
+﻿@model IEnumerable<UniversalWebApi.Areas.Manager.Models.TableSqlModel>
+
+@{
+    ViewBag.Title = "Text/Json";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <style>
+        textarea {
+  width: 500px;
+  height: 150px;
+}
+    </style>
+}
+<br />
+<div>
+    <a href="@Url.Action("Index", "TableSql", new { Area = "Manager",id= ViewContext.RouteData.Values["id"]  })" class="btn btn-primary btn-xs">Back to List</a>
+</div>
+<hr />
+<textarea rows="15" class="form-control" style="min-width:500px; max-width:100%;min-height:50px;height:100%;width:100%;">@ViewBag.TJ</textarea>

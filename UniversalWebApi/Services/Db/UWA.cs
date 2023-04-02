@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Web;
+using UniversalWebApi.Areas.Manager.Models;
 using UniversalWebApi.Models;
 
 namespace UniversalWebApi.Services.Db
@@ -77,6 +78,7 @@ namespace UniversalWebApi.Services.Db
             sql = "SELECT * FROM UWA_PAYLOAD";
             return Execute_v1SqLite.ExecuteQuery(file, sql);
         }
+
         public static EQResultTable_v1 GetByIdPayload(string id)
         {
             var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
@@ -127,6 +129,10 @@ namespace UniversalWebApi.Services.Db
             return Execute_v1SqLite.ExecuteSF(file, sqlList);
         }
 
+
+
+
+
         public static EQResultTable_v1 GetDbTable(string name)
         {
             var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
@@ -139,6 +145,23 @@ namespace UniversalWebApi.Services.Db
             return Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
         }
 
+        public static EQResult_v1 CreateModuleTable(string payloadId, string moduleName)
+        {
+            string table = $"{payloadId}_{moduleName}";
+            sql = $"CREATE TABLE {table} ( `ID` TEXT, `SQL` TEXT, PRIMARY KEY(`ID`) )";
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+            sqlList.Add(new SQL_PLIST_v1 { SQL = sql, iPARAMS = parameters.ToArray() });
+            var ret= Execute_v1SqLite.ExecuteSF(file, sqlList);
+            CreateSql(new TableSqlModel { TABLE_NAME = table, ID = "item-select-by-id", SQL="select * from master_item where item_id=@item_id" });
+
+            return ret;
+        }
+
+
         public static EQResultTable_v1 GetDbTableSql(string name)
         {
             var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
@@ -150,5 +173,39 @@ namespace UniversalWebApi.Services.Db
             return Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
         }
 
+        public static EQResult_v1 CreateSql(TableSqlModel _obj)
+        {
+            sql = $"INSERT INTO {_obj.TABLE_NAME} (ID,SQL)VALUES('{_obj.ID}','{_obj.SQL}')";
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+            sqlList.Add(new SQL_PLIST_v1 { SQL = sql, iPARAMS = parameters.ToArray() });
+            return Execute_v1SqLite.ExecuteSF(file, sqlList);
+        }
+        public static EQResult_v1 DeleteTableSql(string id, string table)
+        {
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+            parameters.Add(new SQLiteParameter("@ID", id));
+            sql = $@"DELETE FROM {table} WHERE ID=@ID";
+            sqlList.Add(new SQL_PLIST_v1 { SQL = sql, iPARAMS = parameters.ToArray() });
+            return Execute_v1SqLite.ExecuteSF(file, sqlList);
+        }
+        public static EQResultTable_v1 GetDbTableSqlById(string table, string id)
+        {
+            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            List<SQL_PLIST_v1> sqlList = new List<SQL_PLIST_v1>();
+
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+            parameters.Add(new SQLiteParameter("@ID", id));
+            //show table data
+            sql = $"SELECT SQL FROM {table} WHERE ID=@ID";
+            return Execute_v1SqLite.ExecuteQuery(file, sql, parameters.ToArray());
+        }
     }
 }

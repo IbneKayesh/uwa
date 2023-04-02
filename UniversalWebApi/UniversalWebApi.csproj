@@ -274,6 +274,10 @@
     <Content Include="Areas\Manager\Views\Branch\Create.cshtml" />
     <Content Include="Areas\Manager\Views\DbTable\Index.cshtml" />
     <Content Include="Areas\Manager\Views\TableSql\Index.cshtml" />
+    <Content Include="Areas\Manager\Views\DbTable\Create.cshtml" />
+    <Content Include="Areas\Manager\Views\TableSql\Create.cshtml" />
+    <Content Include="Areas\Manager\Views\TableSql\TextJson.cshtml" />
+    <Content Include="Areas\Manager\Views\Branch\TextJson.cshtml" />
     <None Include="Properties\PublishProfiles\uwapiPublish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

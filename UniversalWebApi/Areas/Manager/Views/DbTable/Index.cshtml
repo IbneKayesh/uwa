@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<UniversalWebApi.Areas.Manager.Models.DbTableModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Modules";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br/>
 
 <p>
-    <a href="@Url.Action("Create","DbTable", new { Area ="Manager" })" class="btn btn-success btn-xs">Create New</a>
+    <a href="@Url.Action("Create","DbTable", new { Area ="Manager", id= ViewContext.RouteData.Values["id"]  })" class="btn btn-success btn-xs">Create New</a>
 </p>
 <table class="table table-bordered table-condensed table-striped">
     <tr>
@@ -36,3 +36,5 @@
     }
 
 </table>
+
+<p class="text-danger">Module alter options aren't available!</p>

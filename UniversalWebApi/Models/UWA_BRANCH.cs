@@ -28,6 +28,8 @@ namespace UniversalWebApi.Models
         /// <summary>
         /// 0: No Auth, 1: Single Auth, 2: Multiple Auth
         /// </summary>
+        [Display(Name = "Autorization")]
+        [Required(ErrorMessage = "{0} is required")]
         public int BRANCH_STATUS { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using UniversalWebApi.Models;
@@ -33,6 +34,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                     ViewBag.ButtonType = "Update";
                 }
             }
+            Create_Dropdown(db);
             return View(obj);
         }
         [HttpPost]
@@ -61,8 +63,31 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                 }
             }
             ViewBag.ButtonType = buttonValue;
+            Create_Dropdown(obj.PAYLOAD_ID);
             return View(obj);
         }
+
+
+        private void Create_Dropdown(string selected)
+        {
+            List<PARAM> ddlItems = new List<PARAM>();
+            EQResultTable_v1 dbObj = Services.Db.UWA.GetAllPayload();
+            if (dbObj.Result.SUCCESS && dbObj.Result.ROWS > 0)
+            {
+                ddlItems = dbObj.Table.Rows.Cast<DataRow>()
+               .Select(item => new PARAM { VALUE = item["PAYLOAD_ID"].ToString(), TEXT = item["PAYLOAD_ID"].ToString() })
+               .ToList();
+            }
+            ViewBag.PAYLOAD_ID = new SelectList(ddlItems, "VALUE", "TEXT", selected);
+
+            ddlItems = new List<PARAM>();
+            ddlItems.Add(new PARAM { VALUE = "0", TEXT = "No Login" });
+            ddlItems.Add(new PARAM { VALUE = "1", TEXT = "Single Login" });
+            ddlItems.Add(new PARAM { VALUE = "2", TEXT = "Multiple Login" });
+
+            ViewBag.BRANCH_STATUS = new SelectList(ddlItems, "VALUE", "TEXT");
+        }
+
 
 
         public ActionResult Delete(string id, string db)
@@ -73,6 +98,15 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                 EQResult_v1 dbObj = UWA.DeleteBranch(id, db);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public ActionResult TextJson(string id, string db)
+        {
+            string json = $"payloadIndex:{db}\n";
+            json += $"branchIndex:{id}";
+            ViewBag.TJ = json;
+            return View();
         }
     }
 }

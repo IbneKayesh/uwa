@@ -42,6 +42,7 @@
             @Html.DisplayFor(modelItem => item.BRANCH_STATUS)
         </td>
         <td>
+            <a href="@Url.Action("TextJson", "Branch", new { Area = "Manager",id=item.BRANCH_ID,db=item.PAYLOAD_ID})" class="btn btn-success btn-xs">View Text/Json</a>
             <a href="@Url.Action("Create","Branch", new { Area ="Manager",  id=item.BRANCH_ID,db=item.PAYLOAD_ID })" class="btn btn-primary btn-xs">Edit</a>
             <a href="@Url.Action("Delete","Branch", new { Area ="Manager", id = item.BRANCH_ID, db = item.PAYLOAD_ID })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
         </td>

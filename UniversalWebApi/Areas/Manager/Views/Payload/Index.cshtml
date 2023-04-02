@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.PAYLOAD_TABLE)
             </td>
             <td>
-                <a href="@Url.Action("Index","DbTable", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-success btn-xs">View Tables</a>
+                <a href="@Url.Action("Index","DbTable", new { Area ="Manager", id=item.PAYLOAD_TABLE })" class="btn btn-success btn-xs">View Module</a>
                 <a href="@Url.Action("Create","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-primary btn-xs">Edit</a>
                 <a href="@Url.Action("Delete","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
             </td>

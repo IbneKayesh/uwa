@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<UniversalWebApi.Areas.Manager.Models.TableSqlModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Module SQL";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br/>
+<br />
 
 <p>
-    <a href="@Url.Action("Create","TableSql", new { Area ="Manager" })" class="btn btn-success btn-xs">Create New</a>
+    <a href="@Url.Action("Create","TableSql", new { Area ="Manager", id= ViewContext.RouteData.Values["id"]  })" class="btn btn-success btn-xs">Create New</a>
 </p>
 <table class="table table-bordered table-condensed table-striped">
     <tr>
@@ -36,7 +36,8 @@
                 @Html.DisplayFor(modelItem => item.SQL)
             </td>
             <td>
-                <a href="@Url.Action("Create","Payload", new { Area ="Manager", id=item.ID,  table=item.TABLE_NAME })" class="btn btn-primary btn-xs">Edit</a>
+                <a href="@Url.Action("TextJson", "TableSql", new { Area = "Manager", id = item.TABLE_NAME, res = item.ID })" class="btn btn-success btn-xs">View Text/Json</a>
+                <a href="@Url.Action("Delete","TableSql", new { Area ="Manager", id=item.ID, tabl=item.TABLE_NAME })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
             </td>
         </tr>
     }

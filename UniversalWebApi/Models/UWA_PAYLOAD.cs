@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace UniversalWebApi.Models
 {
@@ -36,6 +32,7 @@ namespace UniversalWebApi.Models
         /// 
         [Display(Name = "Table Prefix")]
         [Required(ErrorMessage = "{0} is required")]
+        [StringLength(maximumLength: 4, ErrorMessage = "{0} maximum length is 4")]
         public string PAYLOAD_TABLE { get; set; }
 
     }
