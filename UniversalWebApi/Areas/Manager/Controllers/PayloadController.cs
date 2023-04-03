@@ -34,6 +34,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
                     ViewBag.ButtonType = "Update";
                 }
             }
+            Create_Dropdown(obj.DB_TYPE);
             return View(obj);
         }
         [HttpPost]
@@ -63,9 +64,16 @@ namespace UniversalWebApi.Areas.Manager.Controllers
             }
             ViewBag.ButtonType = buttonValue;
             obj.PAYLOAD_TABLE = Create_ModuleName();
+            Create_Dropdown(obj.DB_TYPE);
             return View(obj);
         }
-
+        private void Create_Dropdown(string selected)
+        {
+            List<PARAM> ddlItems = new List<PARAM>();
+            ddlItems.Add(new PARAM { VALUE = DatabaseType.MSSQL.ToString(), TEXT = DatabaseType.MSSQL.ToString() });
+            ddlItems.Add(new PARAM { VALUE = DatabaseType.ORACLE.ToString(), TEXT = DatabaseType.ORACLE.ToString() });
+            ViewBag.DB_TYPE = new SelectList(ddlItems, "VALUE", "TEXT");
+        }
         public ActionResult Delete(string id)
         {
             var obj = new UWA_BRANCH();

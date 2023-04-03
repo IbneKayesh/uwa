@@ -10,44 +10,52 @@
 <p>
     <a href="@Url.Action("Create","Payload", new { Area ="Manager" })" class="btn btn-success btn-xs">Create New</a>
 </p>
-<table class="table table-bordered table-condensed table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.PAYLOAD_ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DB_CONNECTION)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DB_DESC)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PAYLOAD_TABLE)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-striped">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PAYLOAD_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DB_CONNECTION)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DB_DESC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PAYLOAD_TABLE)
-            </td>
-            <td>
-                <a href="@Url.Action("Index","DbTable", new { Area ="Manager", id=item.PAYLOAD_TABLE })" class="btn btn-success btn-xs">View Module</a>
-                <a href="@Url.Action("Create","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-primary btn-xs">Edit</a>
-                <a href="@Url.Action("Delete","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.PAYLOAD_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DB_TYPE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DB_CONNECTION)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DB_DESC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PAYLOAD_TABLE)
+            </th>
+            <th></th>
         </tr>
+
+        @foreach (var item in Model)
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PAYLOAD_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DB_TYPE)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DB_CONNECTION)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DB_DESC)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PAYLOAD_TABLE)
+                </td>
+                <td>
+                    <a href="@Url.Action("Index","DbTable", new { Area ="Manager", id=item.PAYLOAD_TABLE })" class="btn btn-success btn-xs">View Module</a>
+                    <a href="@Url.Action("Create","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-primary btn-xs">Edit</a>
+                    <a href="@Url.Action("Delete","Payload", new { Area ="Manager", id=item.PAYLOAD_ID })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
+                </td>
+            </tr>
     }
 
-</table>
+    </table>
+</div>

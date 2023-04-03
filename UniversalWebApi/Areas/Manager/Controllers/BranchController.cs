@@ -108,5 +108,14 @@ namespace UniversalWebApi.Areas.Manager.Controllers
             ViewBag.TJ = json;
             return View();
         }
+
+
+
+
+
+        public ActionResult Test()
+        {
+            return View();
+        }
     }
 }

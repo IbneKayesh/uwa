@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data.OracleClient;
+﻿using Oracle.ManagedDataAccess.Client;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -8,11 +8,11 @@ using UniversalWebApi.Models;
 
 namespace UniversalWebApi.Areas.Oracle.Controllers
 {
+    [CORSDomain]
     public class Oracle_v1Controller : ApiController
     {
-        [CORSDomain]
         [HttpPost]
-        //[HttpOptions]
+        [HttpOptions]
         [Route("api/Oracle/v1/Execute")]
         [ResponseType(typeof(EQResultTable_v1))]
         public EQResultTable_v1 v1_Execute(UWA_BODY uwa_body)

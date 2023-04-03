@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    
+    <script>
+
+        $(document).ready(function () {
+            console.log("ready!");
+
+
+            const uri = "http://alpha.prangroup.com:56135/ngApi/api/Oracle/v1/Execute";
+
+            const item = {
+                isComplete: false,
+                name: 'asd'
+            };
+
+            fetch(uri, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+              .then(response => response.json())
+              .then(() => {
+                  console.log('ok')
+              })
+              .catch(error => console.error('Unable to add item.', error));
+
+
+        });
+
+
+    </script>
+    }

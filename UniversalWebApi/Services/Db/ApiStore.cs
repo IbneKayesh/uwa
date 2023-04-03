@@ -11,7 +11,7 @@ namespace UniversalWebApi.Services.Db
     {
         public static UWA_BRANCH getBranch(UWA_HEADER header)
         {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            var file = AppKeys_v1.DB_PATH;
             string sql = "SELECT * FROM UWA_BRANCH B WHERE B.BRANCH_ID=@BRANCH_ID AND PAYLOAD_ID=@PAYLOAD_ID";
             List<SQLiteParameter> parameters = new List<SQLiteParameter>();
             parameters.Add(new SQLiteParameter("@BRANCH_ID", header.BRANCH_TOKEN));
@@ -33,7 +33,7 @@ namespace UniversalWebApi.Services.Db
         }
         public static UWA_PAYLOAD getDbConnectionString(string payloadId)
         {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            var file = AppKeys_v1.DB_PATH;
             string sql = "SELECT * FROM UWA_PAYLOAD WHERE PAYLOAD_ID=@PAYLOAD_ID";
             List<SQLiteParameter> parameters = new List<SQLiteParameter>();
             parameters.Add(new SQLiteParameter("@PAYLOAD_ID", payloadId));
@@ -54,7 +54,7 @@ namespace UniversalWebApi.Services.Db
         }
         public static List<UWA_CONNECTION> getActiveConnection(string branchId, string payloadId)
         {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            var file = AppKeys_v1.DB_PATH;
 
             List<UWA_CONNECTION> objects = new List<UWA_CONNECTION>();
 
@@ -81,7 +81,7 @@ namespace UniversalWebApi.Services.Db
         }
         public static string GetSqlFile(string resource, string dbPath)
         {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            var file = AppKeys_v1.DB_PATH;
 
             string sql_file_name = resource.Split('.')[0];
             string sql_file_id = resource.Split('.')[1];
@@ -101,7 +101,7 @@ namespace UniversalWebApi.Services.Db
         }
         public static void WriteConnection(UWA_CONNECTION obj, bool isSingle = true)
         {
-            var file = HttpContext.Current.Server.MapPath(AppKeys_v1.DB_PATH);
+            var file = AppKeys_v1.DB_PATH;
             SQL_PLIST_v1 objSql = new SQL_PLIST_v1();
             List<SQLiteParameter> inParams = new List<SQLiteParameter>();
             if (isSingle)

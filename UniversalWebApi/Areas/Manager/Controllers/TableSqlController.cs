@@ -64,6 +64,8 @@ namespace UniversalWebApi.Areas.Manager.Controllers
 
         public ActionResult TextJson(string id, string res)
         {
+            string separator = UWA.GetSeparator(id.Split('_')[0]);
+
             string json = "{\n";
             json += $"\"RESOURCE\" : \"{id.Split('_')[1]}.{res}\",\n";
             json += "\"METHOD\" : \"GET or POST\",\n";
@@ -72,7 +74,7 @@ namespace UniversalWebApi.Areas.Manager.Controllers
             EQResultTable_v1 dbObj = Services.Db.UWA.GetDbTableSqlById(id, res);
             if (dbObj.Result.SUCCESS && dbObj.Result.ROWS > 0)
             {
-                List<string> paramList = FindSqlParameters(dbObj.Table.Rows[0]["SQL"].ToString(), "@");
+                List<string> paramList = FindSqlParameters(dbObj.Table.Rows[0]["SQL"].ToString(), separator);
                 int i = 0;
                 foreach (string param in paramList)
                 {

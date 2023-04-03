@@ -9,37 +9,39 @@
 <p>
     <a href="@Url.Action("Create","TableSql", new { Area ="Manager", id= ViewContext.RouteData.Values["id"]  })" class="btn btn-success btn-xs">Create New</a>
 </p>
-<table class="table table-bordered table-condensed table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TABLE_NAME)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SQL)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-striped">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TABLE_NAME)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SQL)
-            </td>
-            <td>
-                <a href="@Url.Action("TextJson", "TableSql", new { Area = "Manager", id = item.TABLE_NAME, res = item.ID })" class="btn btn-success btn-xs">View Text/Json</a>
-                <a href="@Url.Action("Delete","TableSql", new { Area ="Manager", id=item.ID, tabl=item.TABLE_NAME })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.TABLE_NAME)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SQL)
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TABLE_NAME)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SQL)
+                </td>
+                <td>
+                    <a href="@Url.Action("TextJson", "TableSql", new { Area = "Manager", id = item.TABLE_NAME, res = item.ID })" class="btn btn-success btn-xs">View Text/Json</a>
+                    <a href="@Url.Action("Delete","TableSql", new { Area ="Manager", id=item.ID, tabl=item.TABLE_NAME })" class="btn btn-danger btn-xs" onclick="return confirm('Confirmation !!!\nOnce you send you can not back it.\nAre you sure want to Delete this?');">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

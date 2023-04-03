@@ -12,7 +12,7 @@ namespace UniversalWebApi.Areas.Mssql.Controllers
     {
         [CORSDomain]
         [HttpPost]
-        //[HttpOptions]
+        [HttpOptions]
         [Route("api/Mssql/v1/Execute")]
         [ResponseType(typeof(EQResultTable_v1))]
         public EQResultTable_v1 v1_Execute(UWA_BODY uwa_body)

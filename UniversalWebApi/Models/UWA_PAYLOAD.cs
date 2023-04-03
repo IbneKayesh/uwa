@@ -12,6 +12,13 @@ namespace UniversalWebApi.Models
         public string PAYLOAD_ID { get; set; }
 
         /// <summary>
+        /// Database type
+        /// </summary>
+        [Display(Name = "Database Type/Name")]
+        [Required(ErrorMessage = "{0} is required")]
+        public string DB_TYPE { get; set; }
+
+        /// <summary>
         /// Database connection string
         /// </summary>
         [Display(Name = "Master DB Connection String")]

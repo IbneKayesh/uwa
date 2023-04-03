@@ -1,4 +1,6 @@
-﻿namespace UniversalWebApi.Models
+﻿using System.Web;
+
+namespace UniversalWebApi.Models
 {
     public class AppKeys_v1
     {
@@ -7,7 +9,9 @@
 
         //public static string DB_PATH = "\\apiFile\\v1\\LocalSqlDb\\ApiDb.txt";
 
-        public static string DB_PATH = "\\apiFile\\v1\\uwav1.uwa.db";
+        //public static string DB_PATH = "\\apiFile\\v1\\uwav1.uwa.db";
+        public static string DB_PATH = HttpContext.Current.Server.MapPath("~/apiFile/v1/uwav1.uwa.db");
+
         public static string BRANCH_PATH = "\\apiFile\\v1\\Branch\\";
 
         public static string INVALID_PAYLOAD_TOKEN = "Invalid payload token";

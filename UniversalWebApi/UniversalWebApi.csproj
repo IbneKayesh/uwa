@@ -59,9 +59,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.17.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Data.SQLite, Version=1.0.117.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\lib\net451\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
@@ -186,7 +189,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Areas\Home\Controllers\DocsController.cs" />
     <Compile Include="Areas\Home\Controllers\LoginController.cs" />
     <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
     <Compile Include="Areas\Manager\Controllers\BranchController.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="ModelsV2\UWA_BODY_D.cs" />
     <Compile Include="ModelsV2\UWA_BODY_M.cs" />
     <Compile Include="Models\AppKeys_v1.cs" />
+    <Compile Include="Models\DatabaseType.cs" />
     <Compile Include="Models\EQResultTable_v1.cs" />
     <Compile Include="Models\EQResult_v1.cs" />
     <Compile Include="Models\Execute_v1SqLite.cs" />
@@ -262,7 +265,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="readme.html" />
     <Content Include="apiFile\v1\uwav1.uwa.db" />
     <Content Include="Areas\Home\Views\web.config" />
     <Content Include="Areas\Mssql\Views\web.config" />
@@ -300,7 +302,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Areas\Manager\Views\Branch\Test.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

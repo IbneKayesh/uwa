@@ -23,6 +23,14 @@
                 @Html.ValidationMessageFor(model => model.PAYLOAD_ID, "", new { @class = "text-danger" })
             </div>
         </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.DB_TYPE, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DB_TYPE, null, "-Select-", new { @class = "form-control input" })
+                @Html.ValidationMessageFor(model => model.DB_TYPE, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.DB_CONNECTION, htmlAttributes: new { @class = "control-label col-md-2" })
